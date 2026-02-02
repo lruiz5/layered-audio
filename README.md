@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lofi ATC Player 🎧✈️
+
+A relaxing web application that combines live Air Traffic Control (ATC) radio streams with lofi music for a unique ambient experience.
+
+## Features
+
+- **Live ATC Streams** - Listen to real-time air traffic control communications from major US airports
+- **Connection Status Indicators** - Visual feedback showing stream health (green/yellow/red)
+- **Searchable Airport List** - Find airports by code, name, city, or state
+- **Lofi Music Player** - Background music with volume control
+- **Responsive Design** - Works on desktop and mobile devices
+
+## Supported Airports (West to East)
+
+| Code | ICAO | Airport Name                     | City              |
+| ---- | ---- | -------------------------------- | ----------------- |
+| LAX  | KLAX | Los Angeles International        | Los Angeles, CA   |
+| SFO  | KSFO | San Francisco International      | San Francisco, CA |
+| SEA  | KSEA | Seattle-Tacoma International     | Seattle, WA       |
+| PHX  | KPHX | Phoenix Sky Harbor               | Phoenix, AZ       |
+| DEN  | KDEN | Denver International             | Denver, CO        |
+| ORD  | KORD | O'Hare International             | Chicago, IL       |
+| ATL  | KATL | Hartsfield-Jackson International | Atlanta, GA       |
+| JFK  | KJFK | John F. Kennedy International    | New York, NY      |
+| BOS  | KBOS | Logan International              | Boston, MA        |
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **Audio**: HTML5 Audio API
+- **ATC Streams**: LiveATC.net
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd project-baharat
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+project-baharat/
+├── app/
+│   ├── page.tsx          # Main page component
+│   ├── layout.tsx        # Root layout
+│   └── globals.css       # Global styles
+├── components/
+│   ├── Header.tsx        # App header with branding
+│   ├── ATCStatusIndicator.tsx  # Connection status dot
+│   ├── AirportSearch.tsx # Search input component
+│   ├── AirportList.tsx   # Scrollable airport list
+│   ├── ATCPlayer.tsx     # ATC audio controls
+│   └── MusicPlayer.tsx   # Lofi music controls
+├── data/
+│   └── airports.ts       # Airport data and search helper
+└── public/
+    └── audio/            # Local MP3 files
+```
 
-## Learn More
+## Status Indicators
 
-To learn more about Next.js, take a look at the following resources:
+- 🟢 **Green** - Connected and playing
+- 🟡 **Yellow** - Connecting or buffering
+- 🔴 **Red** - Connection error (auto-retry enabled)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run dev    # Start development server
+npm run build  # Build for production
+npm run start  # Start production server
+npm run lint   # Run ESLint
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+MIT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Acknowledgments
+
+- [LiveATC.net](https://www.liveatc.net/) for ATC streams
+- Lofi music community for ambient tracks
