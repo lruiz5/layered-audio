@@ -1,0 +1,8 @@
+- [x] Initialize Next.js project with TypeScript and Tailwind CSS
+- [ ] Create public/audio/ directory for MP3 files
+- [ ] Create app/page.tsx with main page layout
+- [ ] Create components/AudioPlayer.tsx for audio controls
+- [ ] Implement live ATC stream selection and playback
+- [ ] Implement MP3 selection and looping playback
+- [ ] Add Tailwind styling for ambient lofi look
+- [ ] Run npm run dev and test the app
