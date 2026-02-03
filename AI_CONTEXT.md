@@ -12,7 +12,7 @@ This document provides context for AI assistants working on this project.
 
 - ✅ Page restructure with modular components
 - ✅ Header with global ATC status indicator
-- ✅ Searchable airport list (9 major US airports)
+- ✅ Searchable airport list (8 international + 8 regional airports)
 - ✅ ATC player with connection status monitoring
 - ✅ Enhanced music player with 32 lofi tracks
 - ✅ Shuffle, repeat modes, progress bar, keyboard shortcuts

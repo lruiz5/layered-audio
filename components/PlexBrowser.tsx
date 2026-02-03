@@ -9,20 +9,25 @@ import {
   PlexArtist,
   PlexAlbum,
   PlexTrack,
+  PlexUser,
 } from "@/lib/plex/types";
 
 interface PlexBrowserProps {
   authToken: string;
+  user: PlexUser | null;
   onTrackSelect: (track: PlexTrack, serverUrl: string) => void;
   onTracksSelect: (tracks: PlexTrack[], serverUrl: string) => void;
+  onDisconnect: () => void;
 }
 
 type ViewMode = "playlists" | "artists" | "albums" | "search";
 
 export default function PlexBrowser({
   authToken,
+  user,
   onTrackSelect,
   onTracksSelect,
+  onDisconnect,
 }: PlexBrowserProps) {
   const [client] = useState(() => new PlexClient(authToken));
   const [servers, setServers] = useState<PlexServer[]>([]);
@@ -45,6 +50,7 @@ export default function PlexBrowser({
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Load servers on mount
   useEffect(() => {
@@ -69,6 +75,18 @@ export default function PlexBrowser({
       }
     }
   }, [selectedLibrary, viewMode]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isDropdownOpen && !(event.target as Element).closest(".relative")) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDropdownOpen]);
 
   const loadServers = async () => {
     setIsLoading(true);
@@ -227,20 +245,65 @@ export default function PlexBrowser({
 
   if (!selectedServer) {
     return (
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-        <div className="text-center text-gray-400">
-          {isLoading ? "Loading servers..." : "No Plex servers found"}
+      <div className="card">
+        <div className="empty-state">
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="spinner"></span>
+              <span>Loading servers...</span>
+            </div>
+          ) : (
+            "No Plex servers found"
+          )}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
+    <div className="card">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xl">🎵</span>
-        <h3 className="text-sm font-medium text-gray-300">Plex Music</h3>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <img src="/plex.png" alt="Plex" className="w-6 h-6" />
+          <h3 className="player-title">Plex Music</h3>
+        </div>
+        {user && (
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 p-1 rounded-lg hover:bg-card transition-colors"
+            >
+              {user.thumb ? (
+                <img
+                  src={user.thumb}
+                  alt={user.username}
+                  className="w-8 h-8 rounded-full"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white text-sm font-medium">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <span className="text-sm text-text-secondary">
+                {user.username}
+              </span>
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 top-full mt-1 bg-bg-secondary border border-border-default rounded-lg shadow-lg z-10 min-w-32">
+                <button
+                  onClick={() => {
+                    onDisconnect();
+                    setIsDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-text-primary hover:bg-bg-tertiary rounded-lg transition-colors"
+                >
+                  Disconnect
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Search */}
@@ -252,73 +315,61 @@ export default function PlexBrowser({
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="Search music..."
-            className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="input flex-1"
           />
-          <button
-            onClick={handleSearch}
-            className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded text-sm transition-colors"
-          >
+          <button onClick={handleSearch} className="btn-secondary">
             Search
           </button>
         </div>
       </div>
 
       {/* View Mode Tabs */}
-      <div className="flex gap-2 mb-4">
+      <div className="plex-tabs">
         <button
           onClick={() => setViewMode("playlists")}
-          className={`px-3 py-1.5 text-xs rounded transition-colors ${
-            viewMode === "playlists"
-              ? "bg-orange-600 text-white"
-              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-          }`}
+          className={`plex-tab ${viewMode === "playlists" ? "active" : ""}`}
         >
           Playlists
         </button>
         <button
           onClick={() => setViewMode("artists")}
-          className={`px-3 py-1.5 text-xs rounded transition-colors ${
-            viewMode === "artists"
-              ? "bg-orange-600 text-white"
-              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-          }`}
+          className={`plex-tab ${viewMode === "artists" ? "active" : ""}`}
         >
           Artists
         </button>
         <button
           onClick={() => setViewMode("albums")}
-          className={`px-3 py-1.5 text-xs rounded transition-colors ${
-            viewMode === "albums"
-              ? "bg-orange-600 text-white"
-              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-          }`}
+          className={`plex-tab ${viewMode === "albums" ? "active" : ""}`}
         >
           Albums
         </button>
       </div>
 
       {/* Error Message */}
-      {error && (
-        <div className="mb-4 p-2 bg-red-900/50 border border-red-700 rounded text-xs text-red-200">
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message mb-4">{error}</div>}
 
       {/* Content */}
       <div className="max-h-96 overflow-y-auto custom-scrollbar">
         {isLoading ? (
-          <div className="text-center text-gray-400 py-8">Loading...</div>
+          <div className="empty-state">
+            <div className="flex items-center justify-center gap-2">
+              <span className="spinner"></span>
+              <span>Loading...</span>
+            </div>
+          </div>
         ) : viewMode === "playlists" ? (
           <div className="space-y-2">
             {playlists.map((playlist) => (
               <button
                 key={playlist.ratingKey}
                 onClick={() => handlePlaylistClick(playlist)}
-                className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                className="plex-list-item"
               >
-                <div className="text-sm text-white">{playlist.title}</div>
-                <div className="text-xs text-gray-400">
-                  {playlist.leafCount} tracks
+                <div>
+                  <div className="plex-list-item-title">{playlist.title}</div>
+                  <div className="plex-list-item-subtitle">
+                    {playlist.leafCount} tracks
+                  </div>
                 </div>
               </button>
             ))}
@@ -328,7 +379,14 @@ export default function PlexBrowser({
             <div>
               <button
                 onClick={() => setSelectedArtist(null)}
-                className="mb-3 text-xs text-orange-500 hover:text-orange-400"
+                className="mb-3 text-xs transition-colors"
+                style={{ color: "var(--coral-500)" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--coral-400)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--coral-500)")
+                }
               >
                 ← Back to artists
               </button>
@@ -337,11 +395,13 @@ export default function PlexBrowser({
                   <button
                     key={album.ratingKey}
                     onClick={() => handleAlbumClick(album)}
-                    className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                    className="plex-list-item"
                   >
-                    <div className="text-sm text-white">{album.title}</div>
-                    <div className="text-xs text-gray-400">
-                      {album.year} • {album.leafCount} tracks
+                    <div>
+                      <div className="plex-list-item-title">{album.title}</div>
+                      <div className="plex-list-item-subtitle">
+                        {album.year} • {album.leafCount} tracks
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -353,9 +413,9 @@ export default function PlexBrowser({
                 <button
                   key={artist.ratingKey}
                   onClick={() => handleArtistClick(artist)}
-                  className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                  className="plex-list-item"
                 >
-                  <div className="text-sm text-white">{artist.title}</div>
+                  <div className="plex-list-item-title">{artist.title}</div>
                 </button>
               ))}
             </div>
@@ -366,11 +426,13 @@ export default function PlexBrowser({
               <button
                 key={album.ratingKey}
                 onClick={() => handleAlbumClick(album)}
-                className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                className="plex-list-item"
               >
-                <div className="text-sm text-white">{album.title}</div>
-                <div className="text-xs text-gray-400">
-                  {album.parentTitle} • {album.year}
+                <div>
+                  <div className="plex-list-item-title">{album.title}</div>
+                  <div className="plex-list-item-subtitle">
+                    {album.parentTitle} • {album.year}
+                  </div>
                 </div>
               </button>
             ))}
@@ -379,9 +441,7 @@ export default function PlexBrowser({
           <div className="space-y-4">
             {searchResults.tracks.length > 0 && (
               <div>
-                <h4 className="text-xs font-medium text-gray-400 mb-2">
-                  Tracks
-                </h4>
+                <h4 className="section-header">Tracks</h4>
                 <div className="space-y-2">
                   {searchResults.tracks.map((track) => (
                     <button
@@ -390,11 +450,15 @@ export default function PlexBrowser({
                         selectedServer &&
                         onTrackSelect(track, selectedServer.host)
                       }
-                      className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                      className="plex-list-item"
                     >
-                      <div className="text-sm text-white">{track.title}</div>
-                      <div className="text-xs text-gray-400">
-                        {track.grandparentTitle} • {track.parentTitle}
+                      <div>
+                        <div className="plex-list-item-title">
+                          {track.title}
+                        </div>
+                        <div className="plex-list-item-subtitle">
+                          {track.grandparentTitle} • {track.parentTitle}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -403,19 +467,21 @@ export default function PlexBrowser({
             )}
             {searchResults.albums.length > 0 && (
               <div>
-                <h4 className="text-xs font-medium text-gray-400 mb-2">
-                  Albums
-                </h4>
+                <h4 className="section-header">Albums</h4>
                 <div className="space-y-2">
                   {searchResults.albums.map((album) => (
                     <button
                       key={album.ratingKey}
                       onClick={() => handleAlbumClick(album)}
-                      className="w-full text-left p-3 bg-gray-700/50 hover:bg-gray-700 rounded transition-colors"
+                      className="plex-list-item"
                     >
-                      <div className="text-sm text-white">{album.title}</div>
-                      <div className="text-xs text-gray-400">
-                        {album.parentTitle}
+                      <div>
+                        <div className="plex-list-item-title">
+                          {album.title}
+                        </div>
+                        <div className="plex-list-item-subtitle">
+                          {album.parentTitle}
+                        </div>
                       </div>
                     </button>
                   ))}

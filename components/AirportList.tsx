@@ -18,8 +18,10 @@ export default function AirportList({
 }: AirportListProps) {
   if (airports.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        <p>No airports found matching your search.</p>
+      <div className="empty-state">
+        <p className="empty-state-text">
+          No airports found matching your search.
+        </p>
       </div>
     );
   }
@@ -40,28 +42,18 @@ export default function AirportList({
       <button
         key={airport.code}
         onClick={() => onSelectAirport(airport)}
-        className={`w-full flex items-center justify-between p-4 rounded-lg transition-all ${
-          isSelected
-            ? "bg-blue-600/20 border border-blue-500"
-            : "bg-gray-800/50 border border-gray-700 hover:bg-gray-700/50 hover:border-gray-600"
-        }`}
+        className={`airport-btn ${isSelected ? "selected" : ""}`}
       >
-        <div className="flex items-center gap-4">
+        <div className="airport-btn-content">
           {/* Airport Code */}
-          <div
-            className={`text-lg font-bold ${
-              isSelected ? "text-blue-400" : "text-white"
-            }`}
-          >
-            {airport.code}
-          </div>
+          <div className="airport-code">{airport.code}</div>
 
-          {/* Airport Details */}
-          <div className="text-left">
-            <div className="text-sm text-gray-300">{airport.name}</div>
-            <div className="text-xs text-gray-500">
-              {airport.city}, {airport.state}
-            </div>
+          {/* Airport Name */}
+          <div className="airport-name">{airport.name}</div>
+
+          {/* Airport Location */}
+          <div className="airport-location">
+            {airport.city}, {airport.state}
           </div>
         </div>
 
@@ -72,30 +64,26 @@ export default function AirportList({
   };
 
   return (
-    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800">
+    <div className="airport-list-container custom-scrollbar">
       {/* International Airports Section */}
       {internationalAirports.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">
-            ✈️ International Airports
-          </h3>
-          <div className="space-y-2">
+        <div className="airport-section">
+          <h3 className="section-header">✈️ International Airports</h3>
+          <div className="airport-grid">
             {internationalAirports.map(renderAirportButton)}
           </div>
         </div>
       )}
 
-      {/* Regional Airports Section - Hidden for now (no live feeds available) */}
-      {/* {regionalAirports.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">
-            🛩️ Regional Airports
-          </h3>
-          <div className="space-y-2">
+      {/* Regional Airports Section */}
+      {regionalAirports.length > 0 && (
+        <div className="airport-section">
+          <h3 className="section-header">🛩️ Regional Airports</h3>
+          <div className="airport-grid">
             {regionalAirports.map(renderAirportButton)}
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

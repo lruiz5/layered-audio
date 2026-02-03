@@ -14,27 +14,26 @@ const mp3Tracks = [
   "009 Monma x cocabona - Garnet.mp3",
   "010 Celestial Alignment - Building A New Life.mp3",
   "011 tender spring - Diet Cola w middle school.mp3",
-  "012 Casiio - Stray [zFhfksjf_mY].mp3",
-  "013 Thaehan - Remorse [zFhfksjf_mY].mp3",
-  "014 Blue Wednesday - Dont let go w tender spring [zFhfksjf_mY].mp3",
-  "015 Dr Dundiff - Pink Night Sky [zFhfksjf_mY].mp3",
-  "016 G Mills x HM surf - Mmmm [zFhfksjf_mY].mp3",
-  "017 mell-ø x Phlocalyst - Nautilus [zFhfksjf_mY].mp3",
-  "018 DLJ x TABAL - 3 AM [zFhfksjf_mY].mp3",
-  "019 Kupla - Soft to Touch [zFhfksjf_mY].mp3",
-  "020 Otaam x Sitting Duck - Vivid Memories [zFhfksjf_mY].mp3",
-  "021 Glimlip x Yasper - Floating Away [zFhfksjf_mY].mp3",
-  "022 Glimlip x Sleepermane - Nostalgia [zFhfksjf_mY].mp3",
-  "023 Yasumu - Untold Stories [zFhfksjf_mY].mp3",
-  "024 No Spirit x Fatb - Desire [zFhfksjf_mY].mp3",
-  "025 Mondo Loops - Wandering Another World [zFhfksjf_mY].mp3",
-  "026 Eisu x softy - Snowflakes [zFhfksjf_mY].mp3",
-  "027 Kainbeats - Quilted Dreams [zFhfksjf_mY].mp3",
-  "028 lofty x pointy features - Psilo [zFhfksjf_mY].mp3",
-  "029 kanisan - Astral Walker w Mondo Loops [zFhfksjf_mY].mp3",
-  "030 Chiccote's Beats - Before [zFhfksjf_mY].mp3",
-  "031 Elior - Ponds [zFhfksjf_mY].mp3",
-  "Lazy Sunday 💤 [lofi hip hop] [zFhfksjf_mY].mp3",
+  "012 Casiio - Stray.mp3",
+  "013 Thaehan - Remorse.mp3",
+  "014 Blue Wednesday - Dont let go w tender spring.mp3",
+  "015 Dr Dundiff - Pink Night Sky.mp3",
+  "016 G Mills x HM surf - Mmmm.mp3",
+  "017 mell-ø x Phlocalyst - Nautilus.mp3",
+  "018 DLJ x TABAL - 3 AM.mp3",
+  "019 Kupla - Soft to Touch.mp3",
+  "020 Otaam x Sitting Duck - Vivid Memories.mp3",
+  "021 Glimlip x Yasper - Floating Away.mp3",
+  "022 Glimlip x Sleepermane - Nostalgia.mp3",
+  "023 Yasumu - Untold Stories.mp3",
+  "024 No Spirit x Fatb - Desire.mp3",
+  "025 Mondo Loops - Wandering Another World.mp3",
+  "026 Eisu x softy - Snowflakes.mp3",
+  "027 Kainbeats - Quilted Dreams.mp3",
+  "028 lofty x pointy features - Psilo.mp3",
+  "029 kanisan - Astral Walker w Mondo Loops.mp3",
+  "030 Chiccote's Beats - Before.mp3",
+  "031 Elior - Ponds.mp3",
 ];
 
 // Helper function to format track names for display
@@ -42,7 +41,7 @@ const formatTrackName = (filename: string): string => {
   // Remove file extension
   let name = filename.replace(".mp3", "");
 
-  // Remove YouTube ID pattern [zFhfksjf_mY]
+  // Remove YouTube ID pattern
   name = name.replace(/\s*\[[\w-]+\]\s*$/, "");
 
   // Remove "Lazy Sunday 💤 [lofi hip hop] - " prefix
@@ -282,32 +281,29 @@ export default function MusicPlayer() {
   const displayName = formatTrackName(currentTrack);
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xl">🎵</span>
-        <h3 className="text-sm font-medium text-gray-300">Lofi Music</h3>
-        <div className="ml-auto flex items-center gap-1 text-xs text-gray-500">
-          <kbd className="px-1 py-0.5 bg-gray-700 rounded">Space</kbd>
-          <span>Play/Pause</span>
+    <div className="player-card">
+      <div className="player-header">
+        <span className="player-icon">🎵</span>
+        <h3 className="player-title">Lofi Music</h3>
+        <div className="ml-auto flex items-center gap-1">
+          <span className="kbd">Space</span>
+          <span className="text-xs text-muted">Play/Pause</span>
         </div>
       </div>
 
       {/* Now Playing */}
-      <div className="mb-4">
-        <div className="text-xs text-gray-500 mb-1">Now Playing</div>
-        <div
-          className="text-sm text-white font-medium truncate"
-          title={displayName}
-        >
+      <div className="player-now-playing">
+        <div className="player-now-playing-label">Now Playing</div>
+        <div className="player-track-name" title={displayName}>
           {displayName}
         </div>
-        <div className="text-xs text-gray-400 mt-1">
+        <div className="player-track-info">
           Track {currentTrackIndex + 1} of {mp3Tracks.length}
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="mb-4">
+      <div className="progress-container">
         <input
           type="range"
           min="0"
@@ -315,24 +311,20 @@ export default function MusicPlayer() {
           step="0.1"
           value={currentTime}
           onChange={handleProgressChange}
-          className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          className="progress-bar"
         />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="progress-time">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
       </div>
 
       {/* Main Controls */}
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="player-controls">
         {/* Shuffle */}
         <button
           onClick={toggleShuffle}
-          className={`p-2 rounded transition-colors ${
-            isShuffle
-              ? "text-blue-500 bg-blue-500/20"
-              : "text-gray-400 hover:text-white hover:bg-gray-700"
-          }`}
+          className={`btn-ghost ${isShuffle ? "active" : ""}`}
           title="Shuffle"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -343,7 +335,7 @@ export default function MusicPlayer() {
         {/* Previous */}
         <button
           onClick={handlePrevious}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
+          className="btn-ghost"
           title="Previous (←)"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -354,20 +346,16 @@ export default function MusicPlayer() {
         {/* Play/Pause */}
         <button
           onClick={handlePlayPause}
-          className="flex items-center justify-center w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full transition-colors"
+          className="btn-icon-primary"
           title="Play/Pause (Space)"
         >
           {isPlaying ? (
-            <svg
-              className="w-5 h-5 text-white"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
             </svg>
           ) : (
             <svg
-              className="w-5 h-5 text-white ml-0.5"
+              className="w-5 h-5 ml-0.5"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -377,11 +365,7 @@ export default function MusicPlayer() {
         </button>
 
         {/* Next */}
-        <button
-          onClick={handleNext}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors"
-          title="Next (→)"
-        >
+        <button onClick={handleNext} className="btn-ghost" title="Next (→)">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
           </svg>
@@ -390,11 +374,7 @@ export default function MusicPlayer() {
         {/* Repeat */}
         <button
           onClick={toggleRepeat}
-          className={`p-2 rounded transition-colors ${
-            repeatMode !== "off"
-              ? "text-blue-500 bg-blue-500/20"
-              : "text-gray-400 hover:text-white hover:bg-gray-700"
-          }`}
+          className={`btn-ghost ${repeatMode !== "off" ? "active" : ""}`}
           title={`Repeat: ${repeatMode}`}
         >
           {repeatMode === "one" ? (
@@ -410,9 +390,9 @@ export default function MusicPlayer() {
       </div>
 
       {/* Volume Control */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="player-volume">
         <svg
-          className="w-4 h-4 text-gray-400"
+          className="w-4 h-4 player-volume-icon"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -425,21 +405,19 @@ export default function MusicPlayer() {
           step="0.01"
           value={volume}
           onChange={handleVolumeChange}
-          className="flex-1 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          className="slider flex-1"
           title="Volume (↑↓)"
         />
-        <span className="text-xs text-gray-500 w-8 text-right">
-          {Math.round(volume * 100)}%
-        </span>
+        <span className="player-volume-value">{Math.round(volume * 100)}%</span>
       </div>
 
       {/* Track Selection */}
       <div>
-        <label className="text-xs text-gray-500 mb-2 block">Select Track</label>
+        <label className="text-xs text-muted mb-2 block">Select Track</label>
         <select
           value={currentTrackIndex}
           onChange={(e) => handleTrackChange(parseInt(e.target.value))}
-          className="w-full p-2 bg-gray-700 border border-gray-600 rounded text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-40"
+          className="select"
         >
           {mp3Tracks.map((track, index) => (
             <option key={track} value={index}>

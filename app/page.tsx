@@ -12,6 +12,7 @@ import PlexPlayer from "@/components/PlexPlayer";
 import { ConnectionStatus } from "@/components/ATCStatusIndicator";
 import { airports, searchAirports, Airport } from "@/data/airports";
 import { PlexUser, PlexTrack } from "@/lib/plex/types";
+import { clearAuthToken } from "@/lib/plex/auth";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -68,15 +69,15 @@ export default function Home() {
     : "idle";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950 text-white">
+    <div className="min-h-screen" style={{ background: "var(--bg-primary)" }}>
       {/* Header */}
       <Header globalStatus={globalStatus} />
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Airport Selection */}
-          <div className="lg:col-span-2 space-y-4">
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Airport Selection - Half Width */}
+          <div className="space-y-4">
             {/* Search */}
             <AirportSearch
               searchQuery={searchQuery}
@@ -92,7 +93,7 @@ export default function Home() {
             />
           </div>
 
-          {/* Right Column - Players */}
+          {/* Players - Narrower */}
           <div className="space-y-4">
             {/* ATC Player */}
             <ATCPlayer
@@ -103,14 +104,21 @@ export default function Home() {
             {/* Music Player - Show Plex or Local */}
             {plexUser && plexToken ? (
               <>
-                {/* Plex Auth Status */}
-                <PlexAuth onAuthChange={handlePlexAuthChange} />
-
                 {/* Plex Browser */}
                 <PlexBrowser
                   authToken={plexToken}
+                  user={plexUser}
                   onTrackSelect={handlePlexTrackSelect}
                   onTracksSelect={handlePlexTracksSelect}
+                  onDisconnect={async () => {
+                    // Call logout API (optional, but good practice)
+                    await fetch("/api/plex/logout", { method: "POST" }).catch(
+                      console.error,
+                    );
+                    // Clear local data
+                    clearAuthToken();
+                    handlePlexAuthChange(null, null);
+                  }}
                 />
 
                 {/* Plex Player */}

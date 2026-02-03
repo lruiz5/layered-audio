@@ -12,24 +12,24 @@ A relaxing web application that combines live Air Traffic Control (ATC) radio st
 
 ## Supported Airports
 
-### International Airports (9)
+### International Airports (8)
 
 | Code | ICAO | Airport Name                     | City              |
 | ---- | ---- | -------------------------------- | ----------------- |
 | LAX  | KLAX | Los Angeles International        | Los Angeles, CA   |
 | SFO  | KSFO | San Francisco International      | San Francisco, CA |
-| SEA  | KSEA | Seattle-Tacoma International     | Seattle, WA       |
-| PHX  | KPHX | Phoenix Sky Harbor International | Phoenix, AZ       |
-| DEN  | KDEN | Denver International             | Denver, CO        |
-| ORD  | KORD | O'Hare International             | Chicago, IL       |
+| DFW  | KDFW | Dallas/Fort Worth International  | Dallas, TX        |
 | ATL  | KATL | Hartsfield-Jackson International | Atlanta, GA       |
 | JFK  | KJFK | John F. Kennedy International    | New York, NY      |
 | BOS  | KBOS | Logan International              | Boston, MA        |
+| HNL  | PHNL | Daniel K. Inouye International   | Honolulu, HI      |
+| HND  | RJTT | Tokyo Haneda International       | Tokyo, Japan      |
 
-### Regional Airports (7)
+### Regional Airports (8)
 
 | Code | ICAO | Airport Name               | City              |
 | ---- | ---- | -------------------------- | ----------------- |
+| APA  | KAPA | Centennial Airport         | Englewood, CO     |
 | SBA  | KSBA | Santa Barbara Municipal    | Santa Barbara, CA |
 | BUR  | KBUR | Hollywood Burbank          | Burbank, CA       |
 | OAK  | KOAK | Oakland International      | Oakland, CA       |

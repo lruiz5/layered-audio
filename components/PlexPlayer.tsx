@@ -141,12 +141,12 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
 
   if (!currentTrack) {
     return (
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-xl">🎵</span>
-          <h3 className="text-sm font-medium text-gray-300">Plex Player</h3>
+      <div className="player-card">
+        <div className="player-header">
+          <img src="/plex.png" alt="Plex" className="w-6 h-6" />
+          <h3 className="player-title">Plex Player</h3>
         </div>
-        <div className="text-xs text-gray-400 text-center py-4">
+        <div className="empty-state">
           Select music from your Plex library to start playing
         </div>
       </div>
@@ -154,24 +154,22 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
   }
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xl">🎵</span>
-        <h3 className="text-sm font-medium text-gray-300">Now Playing</h3>
+    <div className="player-card">
+      <div className="player-header">
+        <img src="/plex.png" alt="Plex" className="w-6 h-6" />
+        <h3 className="player-title">Now Playing</h3>
       </div>
 
       {/* Track Info */}
-      <div className="mb-4">
-        <div className="text-sm text-white font-medium truncate">
-          {currentTrack.title}
-        </div>
-        <div className="text-xs text-gray-400 truncate">
+      <div className="player-now-playing">
+        <div className="player-track-name">{currentTrack.title}</div>
+        <div className="player-track-info">
           {currentTrack.grandparentTitle} • {currentTrack.parentTitle}
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="mb-4">
+      <div className="progress-container">
         <input
           type="range"
           min="0"
@@ -179,24 +177,20 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
           step="0.1"
           value={currentTime}
           onChange={handleSeek}
-          className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500"
+          className="progress-bar"
         />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="progress-time">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="player-controls">
         {/* Shuffle */}
         <button
           onClick={() => setShuffle(!shuffle)}
-          className={`p-2 rounded transition-colors ${
-            shuffle
-              ? "text-orange-500 bg-orange-500/20"
-              : "text-gray-400 hover:text-white"
-          }`}
+          className={`btn-ghost ${shuffle ? "active" : ""}`}
           title="Shuffle"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -208,7 +202,7 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
         <button
           onClick={handlePrevious}
           disabled={currentIndex === 0}
-          className="p-2 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="btn-ghost disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
@@ -218,19 +212,16 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
         {/* Play/Pause */}
         <button
           onClick={handlePlayPause}
-          className="flex items-center justify-center w-12 h-12 bg-orange-600 hover:bg-orange-700 rounded-full transition-colors"
+          className="btn-icon-primary"
+          style={{ background: "var(--coral-500)" }}
         >
           {isPlaying ? (
-            <svg
-              className="w-5 h-5 text-white"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
             </svg>
           ) : (
             <svg
-              className="w-5 h-5 text-white ml-0.5"
+              className="w-5 h-5 ml-0.5"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -245,7 +236,7 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
           disabled={
             !shuffle && currentIndex === queue.length - 1 && repeat === "off"
           }
-          className="p-2 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          className="btn-ghost disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
@@ -259,11 +250,7 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
               repeat === "off" ? "all" : repeat === "all" ? "one" : "off",
             )
           }
-          className={`p-2 rounded transition-colors ${
-            repeat !== "off"
-              ? "text-orange-500 bg-orange-500/20"
-              : "text-gray-400 hover:text-white"
-          }`}
+          className={`btn-ghost ${repeat !== "off" ? "active" : ""}`}
           title={`Repeat: ${repeat}`}
         >
           {repeat === "one" ? (
@@ -279,9 +266,9 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
       </div>
 
       {/* Volume Control */}
-      <div className="flex items-center gap-2">
+      <div className="player-volume">
         <svg
-          className="w-4 h-4 text-gray-400"
+          className="w-4 h-4 player-volume-icon"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -294,16 +281,14 @@ export default function PlexPlayer({ authToken }: PlexPlayerProps) {
           step="0.01"
           value={volume}
           onChange={handleVolumeChange}
-          className="flex-1 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-orange-500"
+          className="slider flex-1"
         />
-        <span className="text-xs text-gray-500 w-8 text-right">
-          {Math.round(volume * 100)}%
-        </span>
+        <span className="player-volume-value">{Math.round(volume * 100)}%</span>
       </div>
 
       {/* Queue Info */}
       {queue.length > 1 && (
-        <div className="mt-3 text-xs text-gray-500 text-center">
+        <div className="text-xs text-muted text-center mt-3">
           Track {currentIndex + 1} of {queue.length}
         </div>
       )}

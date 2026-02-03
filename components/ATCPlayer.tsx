@@ -111,37 +111,37 @@ export default function ATCPlayer({ airport, onStatusChange }: ATCPlayerProps) {
 
   if (!airport) {
     return (
-      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-xl">📻</span>
-          <h3 className="text-sm font-medium text-gray-300">ATC Radio</h3>
+      <div className="player-card">
+        <div className="player-header">
+          <span className="player-icon">📻</span>
+          <h3 className="player-title">ATC Radio</h3>
         </div>
-        <p className="text-sm text-gray-500">Select an airport to listen</p>
+        <p className="text-sm text-muted">Select an airport to listen</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4">
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xl">📻</span>
-        <h3 className="text-sm font-medium text-gray-300">ATC Radio</h3>
+    <div className="player-card">
+      <div className="player-header">
+        <span className="player-icon">📻</span>
+        <h3 className="player-title">ATC Radio</h3>
       </div>
 
       {/* Current Airport */}
       <div className="mb-4">
-        <div className="text-lg font-bold text-white">{airport.code}</div>
-        <div className="text-xs text-gray-400">{airport.name}</div>
+        <div className="text-lg font-bold text-primary">{airport.code}</div>
+        <div className="text-xs text-muted">{airport.name}</div>
       </div>
 
       {/* Status Message */}
       {status === "error" && (
-        <div className="text-xs text-red-400 mb-3">
-          Connection failed. Retrying...
-        </div>
+        <div className="error-message mb-3">Connection failed. Retrying...</div>
       )}
       {status === "connecting" && (
-        <div className="text-xs text-yellow-400 mb-3">Connecting...</div>
+        <div className="text-xs mb-3" style={{ color: "var(--coral-400)" }}>
+          Connecting...
+        </div>
       )}
 
       {/* Controls */}
@@ -149,15 +149,16 @@ export default function ATCPlayer({ airport, onStatusChange }: ATCPlayerProps) {
         {/* Play/Pause Button */}
         <button
           onClick={handlePlayPause}
-          className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-            status === "error"
-              ? "bg-red-600 hover:bg-red-700"
-              : "bg-green-600 hover:bg-green-700"
-          }`}
+          className="btn-icon-primary"
+          style={{
+            background:
+              status === "error" ? "var(--coral-500)" : "var(--emerald-500)",
+          }}
         >
           {isPlaying ? (
             <svg
-              className="w-4 h-4 text-white"
+              className="w-4 h-4"
+              style={{ color: "var(--emerald-950)" }}
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -165,7 +166,8 @@ export default function ATCPlayer({ airport, onStatusChange }: ATCPlayerProps) {
             </svg>
           ) : (
             <svg
-              className="w-4 h-4 text-white ml-0.5"
+              className="w-4 h-4 ml-0.5"
+              style={{ color: "var(--emerald-950)" }}
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -175,9 +177,9 @@ export default function ATCPlayer({ airport, onStatusChange }: ATCPlayerProps) {
         </button>
 
         {/* Volume Control */}
-        <div className="flex-1 flex items-center gap-2">
+        <div className="player-volume flex-1">
           <svg
-            className="w-4 h-4 text-gray-400"
+            className="w-4 h-4 player-volume-icon"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -190,9 +192,9 @@ export default function ATCPlayer({ airport, onStatusChange }: ATCPlayerProps) {
             step="0.01"
             value={volume}
             onChange={handleVolumeChange}
-            className="flex-1 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+            className="slider flex-1"
           />
-          <span className="text-xs text-gray-500 w-8 text-right">
+          <span className="player-volume-value">
             {Math.round(volume * 100)}%
           </span>
         </div>
