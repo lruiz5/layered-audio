@@ -59,7 +59,27 @@
 - [x] Fix connection selection (prefer public/Tailscale URLs)
 - [x] Remove navigator.userAgent for server compatibility
 
-### Phase 6: Documentation
+### Phase 6: UI Unification ✅ COMPLETE
+
+- [x] Implement Emerald color palette in globals.css
+- [x] Add Frutiger font-face declarations
+- [x] Create unified button system (primary/secondary/coral/ghost)
+- [x] Update card and form component styles
+- [x] Implement custom scrollbar styling
+- [x] Update Header.tsx with new emerald theme
+- [x] Update AirportList.tsx with new button styles
+- [x] Update AirportSearch.tsx with new input styles
+- [x] Redesign MusicPlayer.tsx with unified system
+- [x] Update ATCPlayer.tsx to match new design
+- [x] Update PlexAuth.tsx with coral accents
+- [x] Update PlexBrowser.tsx with unified styles
+- [x] Update PlexPlayer.tsx to match system
+- [x] Update ATCStatusIndicator.tsx with new colors
+- [x] Replace generic icons with custom Plex logo
+- [x] Fix Plex disconnect functionality
+- [x] Improve dropdown styling and theme consistency
+
+### Phase 7: Documentation
 
 - [x] Update README.md with project overview
 - [x] Create AI_CONTEXT.md for AI session continuity
@@ -149,16 +169,24 @@
 
 ### Airports
 
-**International (9 - Visible)**
+**International (8 - Visible)**
 
 1. LAX - Los Angeles International
 2. SFO - San Francisco International
-3. SEA - Seattle-Tacoma International
-4. PHX - Phoenix Sky Harbor
-5. DEN - Denver International
-6. ORD - Chicago O'Hare
-7. ATL - Atlanta Hartsfield-Jackson
-8. JFK - New York JFK
-9. BOS - Boston Logan
+3. DFW - Dallas/Fort Worth International
+4. ATL - Atlanta Hartsfield-Jackson
+5. JFK - New York JFK
+6. BOS - Boston Logan
+7. HNL - Daniel K. Inouye International (Honolulu)
+8. HND - Tokyo Haneda International
 
-**Regional (7 - Hidden)** 10. SBA - Santa Barbara Municipal 11. ACV - Arcata-Eureka 12. BUR - Hollywood Burbank 13. OAK - Oakland International 14. PSP - Palm Springs International 15. RDD - Redding Municipal 16. SMX - Santa Maria Public
+**Regional (8 - Visible)**
+
+9. APA - Centennial Airport (Denver area)
+10. SBA - Santa Barbara Municipal
+11. BUR - Hollywood Burbank
+12. OAK - Oakland International
+13. SMX - Santa Maria Public
+14. PSP - Palm Springs International
+15. RDD - Redding Municipal
+16. ACV - Arcata-Eureka

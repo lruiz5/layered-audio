@@ -1,45 +1,908 @@
 @import "tailwindcss";
 
+/* ============================================
+   LOFI ATC PLAYER - DESIGN SYSTEM
+   Tailwind CSS 4 Compatible
+   ============================================ */
+
+/* Font Face Definitions */
+@font-face {
+  font-family: "Frutiger";
+  src: url("/fonts/Frutiger.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Frutiger";
+  src: url("/fonts/Frutiger_bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================
+   THEME CONFIGURATION (Tailwind CSS 4)
+   ============================================ */
+
+@theme {
+  /* Emerald Color Palette */
+  --color-emerald-50: #eefff6;
+  --color-emerald-100: #d7ffec;
+  --color-emerald-200: #b2ffdb;
+  --color-emerald-300: #76ffc2;
+  --color-emerald-400: #34f49e;
+  --color-emerald-500: #09d178;
+  --color-emerald-600: #01b866;
+  --color-emerald-700: #059053;
+  --color-emerald-800: #0a7144;
+  --color-emerald-900: #0b5c3a;
+  --color-emerald-950: #00341f;
+
+  /* Coral Color Palette */
+  --color-coral-300: #ffa8a8;
+  --color-coral-400: #ff7f7f;
+  --color-coral-500: #ff6b6b;
+  --color-coral-600: #ee5a5a;
+  --color-coral-700: #d94545;
+
+  /* Font Family */
+  --font-sans: "Frutiger", Arial, Helvetica, sans-serif;
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Emerald Color Palette */
+  --emerald-50: #eefff6;
+  --emerald-100: #d7ffec;
+  --emerald-200: #b2ffdb;
+  --emerald-300: #76ffc2;
+  --emerald-400: #34f49e;
+  --emerald-500: #09d178;
+  --emerald-600: #01b866;
+  --emerald-700: #059053;
+  --emerald-800: #0a7144;
+  --emerald-900: #0b5c3a;
+  --emerald-950: #00341f;
+
+  /* Coral Color Palette */
+  --coral-300: #ffa8a8;
+  --coral-400: #ff7f7f;
+  --coral-500: #ff6b6b;
+  --coral-600: #ee5a5a;
+  --coral-700: #d94545;
+
+  /* Background Colors */
+  --bg-primary: #0b5c3a;
+  --bg-secondary: #0a7144;
+  --bg-tertiary: #059053;
+  --bg-card: rgba(10, 113, 68, 0.5);
+
+  /* Text Colors */
+  --text-primary: #eefff6;
+  --text-secondary: #b2ffdb;
+  --text-muted: #76ffc2;
+  --text-accent: #34f49e;
+
+  /* Border Colors */
+  --border-default: #059053;
+  --border-hover: #01b866;
+  --border-focus: #09d178;
+
+  /* Semantic Colors */
+  --success: #09d178;
+  --warning: #ff6b6b;
+  --error: #ee5a5a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================
+   BASE STYLES
+   ============================================ */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-family: "Frutiger", Arial, Helvetica, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Frutiger", Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
 }
 
-/* Custom Scrollbar */
+/* ============================================
+   HEADER COMPONENT
+   ============================================ */
+
+.header {
+  width: 100%;
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-default);
+  padding: 1rem 1.5rem;
+}
+
+.header-content {
+  max-width: 56rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-title {
+  font-family: "Frutiger", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-status-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   STATUS INDICATORS
+   ============================================ */
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.status-dot.lg {
+  width: 16px;
+  height: 16px;
+}
+
+.status-connected {
+  background: #34f49e;
+  box-shadow: 0 0 8px #34f49e;
+}
+
+.status-connecting {
+  background: #ff7f7f;
+  animation: pulse 1.5s infinite;
+}
+
+.status-error {
+  background: #ee5a5a;
+}
+
+.status-idle {
+  background: #059053;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   FORM ELEMENTS
+   ============================================ */
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(9, 209, 120, 0.2);
+}
+
+/* Input with left icon */
+.input.pl-10 {
+  padding-left: 2.5rem;
+}
+
+/* Input with right icon */
+.input.pr-10 {
+  padding-right: 2.5rem;
+}
+
+/* ============================================
+   AIRPORT LIST
+   ============================================ */
+
+.airport-list-container {
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.airport-section {
+  margin-bottom: 1.5rem;
+}
+
+.airport-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 0.5rem 0;
+  margin-bottom: 0.75rem;
+}
+
+.airport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.airport-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  min-height: 80px;
+}
+
+.airport-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-hover);
+}
+
+.airport-btn.selected {
+  background: rgba(9, 209, 120, 0.15);
+  border-color: #09d178;
+}
+
+.airport-btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.airport-code {
+  font-family: "Frutiger", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.airport-btn.selected .airport-code {
+  color: #34f49e;
+}
+
+.airport-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.airport-name {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.airport-location {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.empty-state-text {
+  font-size: 0.875rem;
+}
+
+/* ============================================
+   PLAYER CARDS
+   ============================================ */
+
+.player-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.player-icon {
+  font-size: 1.25rem;
+}
+
+.player-title {
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.player-now-playing {
+  margin-bottom: 1rem;
+}
+
+.player-now-playing-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.player-track-name {
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-track-info {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.player-volume {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.player-volume-icon {
+  color: var(--text-muted);
+}
+
+.player-volume-value {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  width: 2rem;
+  text-align: right;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn-primary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
+  border: 2px solid #eefff6;
+  border-radius: 9999px;
+  background: #eefff6;
+  color: #0b5c3a;
+  font-family: "Frutiger", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
+  isolation: isolate;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 1;
+  left: -100%;
+  border-radius: 9999px;
+  background: #09d178;
+  z-index: -1;
+  transition: all 0.7s ease;
+}
+
+.btn-primary:hover {
+  color: #eefff6;
+}
+
+.btn-primary:hover::before {
+  left: 0;
+  transform: scale(1.5);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #01b866;
+  border-radius: 9999px;
+  background: transparent;
+  color: #b2ffdb;
+  font-family: "Frutiger", sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #059053;
+  border-color: #09d178;
+  color: #eefff6;
+}
+
+.btn-coral {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #ff6b6b;
+  border-radius: 9999px;
+  background: #ff6b6b;
+  color: #00341f;
+  font-family: "Frutiger", sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-coral:hover {
+  background: #ee5a5a;
+  border-color: #ee5a5a;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: #76ffc2;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: #059053;
+  color: #eefff6;
+}
+
+.btn-ghost.active {
+  background: rgba(9, 209, 120, 0.2);
+  color: #34f49e;
+}
+
+.btn-icon-primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 9999px;
+  background: #09d178;
+  color: #00341f;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon-primary:hover {
+  background: #34f49e;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.progress-container {
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #059053;
+  border-radius: 2px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: #34f49e;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.progress-bar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: #34f49e;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.progress-time {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* ============================================
+   SLIDER
+   ============================================ */
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #059053;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #34f49e;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #76ffc2;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #34f49e;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+/* ============================================
+   PLEX COMPONENTS
+   ============================================ */
+
+.plex-auth-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.plex-user-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plex-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.plex-user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+}
+
+.plex-user-name {
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.plex-user-status {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.plex-connect-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.plex-connect-icon {
+  color: #ff6b6b;
+}
+
+.plex-connect-title {
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.plex-connect-description {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.plex-connect-footer {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+/* Plex Browser */
+.plex-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.plex-tab {
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.plex-tab:hover {
+  background: #059053;
+  border-color: #01b866;
+}
+
+.plex-tab.active {
+  background: #09d178;
+  border-color: #09d178;
+  color: #00341f;
+}
+
+.plex-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.plex-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.plex-list-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-hover);
+}
+
+.plex-list-item-title {
+  font-family: "Frutiger", sans-serif;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.plex-list-item-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   KEYBOARD SHORTCUT BADGE
+   ============================================ */
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.375rem;
+  background: #059053;
+  border: 1px solid #01b866;
+  border-radius: 0.25rem;
+  font-family: "Frutiger", monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   CARD COMPONENT
+   ============================================ */
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-default);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(55, 65, 81, 0.3);
+  background: #0a7144;
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(107, 114, 128, 0.5);
+  background: #01b866;
   border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 0.7);
+  background: #09d178;
+}
+
+/* Global scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a7144;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #01b866;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #09d178;
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #059053;
+  border-top-color: #34f49e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   ERROR MESSAGE
+   ============================================ */
+
+.error-message {
+  padding: 0.5rem;
+  background: rgba(238, 90, 90, 0.1);
+  border: 1px solid #ee5a5a;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  color: #ff7f7f;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-muted {
+  color: var(--text-muted) !important;
 }
