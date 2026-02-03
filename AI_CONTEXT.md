@@ -14,15 +14,17 @@ This document provides context for AI assistants working on this project.
 - ✅ Header with global ATC status indicator
 - ✅ Searchable airport list (9 major US airports)
 - ✅ ATC player with connection status monitoring
-- ✅ Lofi music player with local MP3 support
+- ✅ Enhanced music player with 32 lofi tracks
+- ✅ Shuffle, repeat modes, progress bar, keyboard shortcuts
 - ✅ Status indicators (green/yellow/red)
 - ✅ Auto-retry on connection failure
+- ✅ **Plex Integration** - Full OAuth authentication and music playback
 
 ### Pending Features
 
-- ⏳ Spotify integration for user playlists
+- ⏳ Plex server/library selection UI
+- ⏳ Queue management UI
 - ⏳ More airports
-- ⏳ User preferences/settings persistence
 - ⏳ Dark/light theme toggle
 
 ## Architecture
@@ -37,7 +39,10 @@ app/page.tsx (Main Page)
 │   └── ATCStatusIndicator.tsx (Per-airport status)
 ├── ATCPlayer.tsx (ATC audio controls)
 │   └── ATCStatusIndicator.tsx (Current stream status)
-└── MusicPlayer.tsx (Lofi music controls)
+├── MusicPlayer.tsx (Local lofi music controls)
+├── PlexAuth.tsx (Plex OAuth login/logout)
+├── PlexBrowser.tsx (Browse Plex playlists/artists/albums)
+└── PlexPlayer.tsx (Plex music play back controls)
 ```
 
 ### State Management
@@ -82,14 +87,24 @@ Example: `http://d.liveatc.net/klax_twr` for LAX Tower
 
 ## File Locations
 
-| Purpose          | File                                |
-| ---------------- | ----------------------------------- |
-| Main page        | `app/page.tsx`                      |
-| Airport data     | `data/airports.ts`                  |
-| ATC player       | `components/ATCPlayer.tsx`          |
-| Music player     | `components/MusicPlayer.tsx`        |
-| Status indicator | `components/ATCStatusIndicator.tsx` |
-| Local audio      | `public/audio/`                     |
+| Purpose           | File                                |
+| ----------------- | ----------------------------------- |
+| Main page         | `app/page.tsx`                      |
+| Airport data      | `data/airports.ts`                  |
+| ATC player        | `components/ATCPlayer.tsx`          |
+| Music player      | `components/MusicPlayer.tsx`        |
+| Plex auth         | `components/PlexAuth.tsx`           |
+| Plex browser      | `components/PlexBrowser.tsx`        |
+| Plex player       | `components/PlexPlayer.tsx`         |
+| Plex types        | `lib/plex/types.ts`                 |
+| Plex auth utils   | `lib/plex/auth.ts`                  |
+| Plex API client   | `lib/plex/client.ts`                |
+| Plex OAuth routes | `app/api/plex/auth/route.ts`        |
+|                   | `app/api/plex/callback/route.ts`    |
+|                   | `app/api/plex/logout/route.ts`      |
+| Plex proxy        | `app/api/plex/proxy/route.ts`       |
+| Status indicator  | `components/ATCStatusIndicator.tsx` |
+| Local audio       | `public/audio/`                     |
 
 ## Styling
 
@@ -106,30 +121,95 @@ npm run build  # Production build
 npm run lint   # ESLint check
 ```
 
+## Plex Integration
+
+### OAuth Flow
+
+1. User clicks "Connect to Plex"
+2. App creates auth pin via `/api/plex/auth`
+3. Opens `https://app.plex.tv/auth` in popup window
+4. User authorizes the app
+5. App polls `/api/plex/callback` for auth token
+6. Stores token in localStorage
+7. Fetches user info and servers
+8. Auto-selects first owned server
+9. Loads music libraries and playlists
+
+### API Routes
+
+- `POST /api/plex/auth` - Create auth pin
+- `GET /api/plex/callback?pinId=X` - Poll for auth token
+- `POST /api/plex/logout` - Clear auth token
+- `GET /api/plex/proxy?url=X&token=Y` - Proxy Plex server requests (CORS bypass)
+
+### Key Features
+
+- Browse playlists, artists, albums
+- Search music library
+- Full playback controls (play/pause/skip/shuffle/repeat)
+- Queue management
+- Progress bar with scrubbing
+- Volume control
+
+### Connection Selection
+
+The client prefers non-local connections (public/Tailscale/relay) for server-side proxy compatibility. This ensures the Next.js server can reach Plex servers behind private networks.
+
 ## Known Issues
 
 1. LiveATC streams may fail due to CORS in some browsers
 2. Some airports may have intermittent stream availability
 3. Volume slider styling varies by browser
+4. Plex OAuth requires popup window (may be blocked)
+5. Plex servers behind private networks need public/Tailscale access for proxy
 
 ## Next Steps for AI Sessions
 
 When continuing development:
 
-1. **Spotify Integration** - User requested OAuth authentication to play their own playlists
-   - Will need Spotify Developer credentials
-   - Implement OAuth 2.0 PKCE flow
-   - Use Spotify Web Playback SDK
+1. **Plex Enhancements**
+   - Server selection UI (if multiple servers)
+   - Library selection UI (if multiple music libraries)
+   - Queue management UI
+   - Album artwork display
+   - Better error handling
 
 2. **Additional Airports** - Can add more by following the pattern in `data/airports.ts`
 
 3. **Testing** - No automated tests yet; consider adding Jest/React Testing Library
 
-## Conversation History Summary
+## Recent Changes (Latest Session)
 
-1. Initial setup: Next.js project with basic audio player
-2. Removed yt-dlp and ffmpeg files (handled externally)
-3. Restructured page with new component architecture
-4. Fixed LiveATC stream URLs (ICAO codes)
-5. User requested Spotify integration (pending)
-6. Created documentation for version control
+### Plex Integration Implementation
+
+**Files Created:**
+
+- `lib/plex/types.ts` - TypeScript interfaces for Plex API
+- `lib/plex/auth.ts` - OAuth utilities (pin creation, token management)
+- `lib/plex/client.ts` - Plex API client with proxy support
+- `components/PlexAuth.tsx` - OAuth login/logout UI
+- `components/PlexBrowser.tsx` - Browse playlists/artists/albums
+- `components/PlexPlayer.tsx` - Full playback controls
+- `app/api/plex/auth/route.ts` - Create auth pin endpoint
+- `app/api/plex/callback/route.ts` - OAuth callback polling
+- `app/api/plex/logout/route.ts` - Logout endpoint
+- `app/api/plex/proxy/route.ts` - CORS bypass proxy
+
+**Files Modified:**
+
+- `app/page.tsx` - Integrated Plex components
+- `app/globals.css` - Added custom scrollbar styles
+- `package.json` - Added uuid dependency
+
+**Key Fixes:**
+
+1. Fixed OAuth URL from `plex.tv/auth` to `app.plex.tv/auth`
+2. Fixed server detection to handle direct array response (not MediaContainer)
+3. Removed `navigator.userAgent` for server-side compatibility
+4. Added server-side API routes to bypass CORS
+5. Implemented connection selection preferring public/Tailscale URLs
+6. Created proxy endpoint for Plex server requests
+
+**Dependencies Added:**
+
+- `uuid` - For generating unique client identifiers

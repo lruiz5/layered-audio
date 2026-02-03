@@ -10,19 +10,33 @@ A relaxing web application that combines live Air Traffic Control (ATC) radio st
 - **Lofi Music Player** - Background music with volume control
 - **Responsive Design** - Works on desktop and mobile devices
 
-## Supported Airports (West to East)
+## Supported Airports
+
+### International Airports (9)
 
 | Code | ICAO | Airport Name                     | City              |
 | ---- | ---- | -------------------------------- | ----------------- |
 | LAX  | KLAX | Los Angeles International        | Los Angeles, CA   |
 | SFO  | KSFO | San Francisco International      | San Francisco, CA |
 | SEA  | KSEA | Seattle-Tacoma International     | Seattle, WA       |
-| PHX  | KPHX | Phoenix Sky Harbor               | Phoenix, AZ       |
+| PHX  | KPHX | Phoenix Sky Harbor International | Phoenix, AZ       |
 | DEN  | KDEN | Denver International             | Denver, CO        |
 | ORD  | KORD | O'Hare International             | Chicago, IL       |
 | ATL  | KATL | Hartsfield-Jackson International | Atlanta, GA       |
 | JFK  | KJFK | John F. Kennedy International    | New York, NY      |
 | BOS  | KBOS | Logan International              | Boston, MA        |
+
+### Regional Airports (7)
+
+| Code | ICAO | Airport Name               | City              |
+| ---- | ---- | -------------------------- | ----------------- |
+| SBA  | KSBA | Santa Barbara Municipal    | Santa Barbara, CA |
+| BUR  | KBUR | Hollywood Burbank          | Burbank, CA       |
+| OAK  | KOAK | Oakland International      | Oakland, CA       |
+| SMX  | KSMX | Santa Maria Public         | Santa Maria, CA   |
+| PSP  | KPSP | Palm Springs International | Palm Springs, CA  |
+| RDD  | KRDD | Redding Municipal          | Redding, CA       |
+| ACV  | KACV | Arcata-Eureka              | Arcata, CA        |
 
 ## Tech Stack
 

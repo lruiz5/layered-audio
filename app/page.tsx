@@ -6,8 +6,12 @@ import AirportSearch from "@/components/AirportSearch";
 import AirportList from "@/components/AirportList";
 import ATCPlayer from "@/components/ATCPlayer";
 import MusicPlayer from "@/components/MusicPlayer";
+import PlexAuth from "@/components/PlexAuth";
+import PlexBrowser from "@/components/PlexBrowser";
+import PlexPlayer from "@/components/PlexPlayer";
 import { ConnectionStatus } from "@/components/ATCStatusIndicator";
 import { airports, searchAirports, Airport } from "@/data/airports";
+import { PlexUser, PlexTrack } from "@/lib/plex/types";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,6 +19,10 @@ export default function Home() {
   const [airportStatuses, setAirportStatuses] = useState<
     Record<string, ConnectionStatus>
   >({});
+
+  // Plex state
+  const [plexUser, setPlexUser] = useState<PlexUser | null>(null);
+  const [plexToken, setPlexToken] = useState<string | null>(null);
 
   const filteredAirports = searchAirports(searchQuery);
 
@@ -24,6 +32,32 @@ export default function Home() {
         ...prev,
         [code]: status,
       }));
+    },
+    [],
+  );
+
+  const handlePlexAuthChange = useCallback(
+    (user: PlexUser | null, token: string | null) => {
+      setPlexUser(user);
+      setPlexToken(token);
+    },
+    [],
+  );
+
+  const handlePlexTrackSelect = useCallback(
+    (track: PlexTrack, serverUrl: string) => {
+      if (typeof window !== "undefined" && (window as any).plexPlayer) {
+        (window as any).plexPlayer.playTrack(track, serverUrl);
+      }
+    },
+    [],
+  );
+
+  const handlePlexTracksSelect = useCallback(
+    (tracks: PlexTrack[], serverUrl: string) => {
+      if (typeof window !== "undefined" && (window as any).plexPlayer) {
+        (window as any).plexPlayer.playTracks(tracks, serverUrl);
+      }
     },
     [],
   );
@@ -66,8 +100,31 @@ export default function Home() {
               onStatusChange={handleStatusChange}
             />
 
-            {/* Music Player */}
-            <MusicPlayer />
+            {/* Music Player - Show Plex or Local */}
+            {plexUser && plexToken ? (
+              <>
+                {/* Plex Auth Status */}
+                <PlexAuth onAuthChange={handlePlexAuthChange} />
+
+                {/* Plex Browser */}
+                <PlexBrowser
+                  authToken={plexToken}
+                  onTrackSelect={handlePlexTrackSelect}
+                  onTracksSelect={handlePlexTracksSelect}
+                />
+
+                {/* Plex Player */}
+                <PlexPlayer authToken={plexToken} />
+              </>
+            ) : (
+              <>
+                {/* Plex Auth Button */}
+                <PlexAuth onAuthChange={handlePlexAuthChange} />
+
+                {/* Local Music Player */}
+                <MusicPlayer />
+              </>
+            )}
           </div>
         </div>
       </main>
